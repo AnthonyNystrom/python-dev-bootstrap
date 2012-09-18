@@ -1,0 +1,125 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Python-dev-bootstrap by AnthonyNystrom</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>Python-dev-bootstrap</h1>
+        <p>A Vagrant VM based Python Development Bootstrap</p>
+
+        <p class="view"><a href="https://github.com/AnthonyNystrom/python-dev-bootstrap">View the Project on GitHub <small>AnthonyNystrom/python-dev-bootstrap</small></a></p>
+
+
+        <ul>
+          <li><a href="https://github.com/AnthonyNystrom/python-dev-bootstrap/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/AnthonyNystrom/python-dev-bootstrap/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/AnthonyNystrom/python-dev-bootstrap">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <h2>DESCRIPTION</h2>
+
+<p>Complete Python Development Environment on top of a Vagrant VM. Inlcudes GUI support.</p>
+
+<h2>REQUIREMENTS</h2>
+
+<ul>
+<li><a href="http://www.virtualbox.org/">VirtualBox</a></li>
+<li><a href="http://www.vagrantup.com/">Vagrant</a></li>
+<li>
+<a href="http://git-scm.com/downloads">git</a>
+or one of the Github GUI clients: <a href="http://mac.github.com/">OSX</a>, <a href="http://windows.github.com/">Windows</a>, <a href="http://eclipse.github.com/">Eclipse</a>
+</li>
+<li>
+<p><a href="https://github.com/AnthonyNystrom/python-dev-bootstrap">python-dev-bootstrap</a></p>
+
+<pre><code>Clone this repo: $ git clone git@github.com:AnthonyNystrom/python-dev-bootstrap.git
+Or, using one of the Github GUI clients, click the button: Clone in {platform}
+</code></pre>
+</li>
+</ul><h2>BASIC USAGE</h2>
+
+<ol>
+<li>Assuming you have met the above requirements. </li>
+<li>
+<p>Provision a new Vagrant VM (using PythonDevBootstrap as example)</p>
+
+<pre><code>$ vagrant box add PythonDevBootstrap http://files.vagrantup.com/lucid32.box
+$ cd python-dev-bootstrap (Wherever your cloned path is for this repo)
+$ vagrant up
+$ vagrant ssh - (Not required for GUI mode)
+$ sudo su (Gets you to root) :) - (Not required for GUI mode)
+</code></pre>
+</li>
+<li>
+<p>GUI Mode (In GUI mode, the CLI will open along side your terminal. Once the provisioning is complete in your terminal window you will see $ prompt) Continue below:</p>
+
+<pre><code>$ vagrant up
+$ Login: vagrant
+$ Pass: vagrant
+$ startx
+</code></pre>
+</li>
+</ol><p>The above will build a 512MB virtual machine running Ubuntu with the following installed and configured:</p>
+
+<ol>
+<li>Python</li>
+<li>PIL</li>
+<li>PIP</li>
+<li>SciPy</li>
+<li>BioPy</li>
+<li>Redis, MongoDB, Postgres, MySQL, Elastic Search</li>
+<li>Django</li>
+<li>SQLAlchemy</li>
+<li>Bottle</li>
+<li>Twisted</li>
+<li>Vim</li>
+<li>IDLE</li>
+<li>gEdit</li>
+<li>SublimeText2</li>
+<li>Pyes</li>
+<li>POW (Python on Wheels) &amp; Dep...</li>
+<li>pyQt</li>
+<li>NumPy</li>
+<li>numarray</li>
+<li>matplotlib</li>
+<li>scrape</li>
+<li>Beautiful Soup</li>
+<li>pythonweb</li>
+<li>mechanize</li>
+</ol><h2>NOTES</h2>
+
+<pre><code>1. If you would like to disable GUI support. Remove the following line from
+Vagrantfile: 
+
+config.vm.boot_mode = :gui
+</code></pre>
+
+<h2>OTHER</h2>
+
+<p>You can download different types of "boxes" as your base at the following URL:</p>
+
+<p><a href="http://www.vagrantbox.es/">http://www.vagrantbox.es/</a></p>
+
+<hr><p>Maintained by <a href="https://github.com/AnthonyNystrom">Anthony Nystrom</a></p>
+      </section>
+      <footer>
+        <p>This project is maintained by <a href="https://github.com/AnthonyNystrom">AnthonyNystrom</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <script src="javascripts/scale.fix.js"></script>
+    
+  </body>
+</html>
