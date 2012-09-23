@@ -8,6 +8,7 @@ Complete Python Development Environment on top of a Vagrant VM. Inlcudes GUI sup
 
 
 * [VirtualBox](http://www.virtualbox.org/)
+* [VirtualBox Extension Pack](http://download.virtualbox.org/virtualbox/4.2.0/Oracle_VM_VirtualBox_Extension_Pack-4.2.0-80737.vbox-extpack)
 * [Vagrant](http://www.vagrantup.com/)
 * [git](http://git-scm.com/downloads)
 or one of the Github GUI clients: [OSX](http://mac.github.com/), [Windows] (http://windows.github.com/), [Eclipse](http://eclipse.github.com/)
