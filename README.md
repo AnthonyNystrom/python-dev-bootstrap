@@ -1,6 +1,6 @@
 ## DESCRIPTION
 
-Complete Python Development Environment on top of a Vagrant VM. Inlcudes GUI support.
+Complete Python Development Environment on top of a Vagrant VM.
 
 
 
@@ -25,15 +25,9 @@ or one of the Github GUI clients: [OSX](http://mac.github.com/), [Windows] (http
         $ vagrant box add PythonDevBootstrap http://files.vagrantup.com/lucid32.box
         $ cd python-dev-bootstrap (Wherever your cloned path is for this repo)
         $ vagrant up
- 		$ vagrant ssh - (Not required for GUI mode)
- 		$ sudo su (Gets you to root) :) - (Not required for GUI mode)
+ 		$ vagrant ssh
+ 		$ sudo su (Gets you to root) :)
  		
-3. GUI Mode (In GUI mode, the CLI will open along side your terminal. Once the provisioning is complete in your terminal window you will see $ prompt) Continue below:
-
-		$ vagrant up
-		$ Login: vagrant
-		$ Pass: vagrant
-		$ startx
 
  		
 The above will build a 512MB virtual machine running Ubuntu with the following installed and configured:
@@ -63,12 +57,7 @@ The above will build a 512MB virtual machine running Ubuntu with the following i
 22. pythonweb
 23. mechanize
 
-## NOTES
 
-	1. If you would like to disable GUI support. Remove the following line from
-	Vagrantfile: 
-	
-	config.vm.boot_mode = :gui
 	
 ## OTHER
 
