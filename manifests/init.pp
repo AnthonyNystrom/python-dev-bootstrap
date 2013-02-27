@@ -1,14 +1,69 @@
 import "sql.pp"
 
-class general{
+class core {
   
     exec { "apt-update":
       command => "/usr/bin/sudo apt-get -y update"
     }
   
     package { 
-      [ "vim", "git-core", "python", "python-setuptools", "python-dev", "python-twisted", "python-pip", "python-matplotlib",
-        "build-essential", "python-imaging", "python-numpy", "python-scipy", "python-software-properties", "idle", "python-qt4"]:
+      [ "vim", "git-core", "build-essential" ]:
+        ensure => ["installed"],
+        require => Exec['apt-update']    
+    }
+}
+
+class python {
+
+    package { 
+      [ "python", "python-setuptools", "python-dev", "python-pip",
+        "python-matplotlib", "python-imaging", "python-numpy", "python-scipy",
+        "python-software-properties", "idle", "python-qt4", "python-wxgtk2.8" ]:
+        ensure => ["installed"],
+        require => Exec['apt-update']    
+    }
+
+    exec {
+      "virtualenv":
+      command => "/usr/bin/sudo pip install virtualenv",
+      require => Package["python-dev", "python-pip"]
+    }
+
+}
+
+class pythondev {
+    exec {
+      "SquareMap":
+      command => "/usr/bin/sudo pip install SquareMap",
+      require => Package["python-dev", "python-pip"]
+    }
+    exec {
+      "RunSnakeRun":
+      command => "/usr/bin/sudo pip install RunSnakeRun",
+      require => Package["python-dev", "python-pip"]
+    }
+
+}
+
+class science {
+
+    exec {
+      "numarray":
+      command => "/usr/bin/sudo easy_install http://downloads.sourceforge.net/project/numpy/Old%20Numarray/1.5.2/numarray-1.5.2.tar.gz",
+      require => Package["python-setuptools"]
+    }
+
+    exec {
+      "biopy":
+      command => "/usr/bin/sudo pip install http://biopy.googlecode.com/files/biopy-0.1.7.tar.gz",
+      require => Package["python-numpy", "python-dev", "python-scipy", "python-pip"]
+    }
+}
+
+class web {
+
+    package { 
+      [ "python-twisted" ]:
         ensure => ["installed"],
         require => Exec['apt-update']    
     }
@@ -19,12 +74,6 @@ class general{
       require => Package["python-dev", "python-pip"]
     }
 
-    exec{
-      "biopy":
-      command => "/usr/bin/sudo pip install http://biopy.googlecode.com/files/biopy-0.1.7.tar.gz",
-      require => Package["python-numpy", "python-dev", "python-scipy", "python-pip"]
-    }
-    
     exec {
       "sqlalchemy":
       command => "/usr/bin/sudo pip install sqlalchemy",
@@ -48,12 +97,6 @@ class general{
       command => "/usr/bin/sudo pip install mechanize",
       require => Package["python-pip"]
     }
-
-    exec {
-      "numarray":
-      command => "/usr/bin/sudo easy_install http://downloads.sourceforge.net/project/numpy/Old%20Numarray/1.5.2/numarray-1.5.2.tar.gz",
-      require => Package["python-setuptools"]
-    }
     
     exec {
       "scrapelib":
@@ -67,9 +110,9 @@ class general{
       require => Package["python-pip"]
     }
 
+}
 
-
-#PythonOnWheels
+class pythononwheels {
 
     exec {
       "WebOb":
@@ -111,7 +154,7 @@ class general{
 }
 
 
-class gui{
+class gui {
 
   exec { "apt-update-gui":
     command => "/usr/bin/sudo apt-get -y update"
@@ -124,11 +167,10 @@ class gui{
   }
   
   exec {
-    "gedit":
-    command => "/usr/bin/sudo apt-get install gedit",
-    require => Package["ubuntu-desktop"]
+    "gvim":
+    command => "/usr/bin/sudo apt-get install gvim",
   }
-  
+
   exec {
     "repo":
     command => "/usr/bin/sudo add-apt-repository ppa:webupd8team/sublime-text-2 && /usr/bin/sudo apt-get -y update",
@@ -143,10 +185,15 @@ class gui{
   
 }
 
-include general
-include sql
-include mongodb
-include elasticsearch
+include core
+include python
 include gui
+
+#include science
+#include web
+#include pythononwheels
+#include sql
+#include mongodb
+#include elasticsearch
 
 
