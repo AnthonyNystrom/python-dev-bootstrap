@@ -32,17 +32,39 @@ class python {
 }
 
 class pythondev {
+    package {
+        [ "dpkg-dev", "build-essential", "swig", "python2.7-dev", "libwebkitgtk-dev", "libjpeg-dev", "libtiff-dev",
+        "checkinstall", "ubuntu-restricted-extras", "freeglut3", "freeglut3-dev", "libgtk2.0-dev", "libsdl1.2-dev",
+        "libgstreamer-plugins-base0.10-dev", ]
+        ensure => ["installed"]
+    }
+
     exec {
       "SquareMap":
       command => "/usr/bin/sudo pip install SquareMap",
       require => Package["python-dev", "python-pip"]
     }
+
     exec {
       "RunSnakeRun":
       command => "/usr/bin/sudo pip install RunSnakeRun",
       require => Package["python-dev", "python-pip"]
     }
 
+    exec {
+      "wx-from-source":
+      command => "cd /tmp && apt-get source -d wxwidgets2.8 && dpkg-source -x wxwidgets2.8_2.8.12.1-6ubuntu2.dsc && cd wxwidgets2.8-2.8.12.1/wxPython && sudo python setup.py install"
+      require => Package["python-dev", "python-pip", "dpkg-dev"]
+    }
+}
+
+class networking {
+    package { 
+      [ "snmp", "tkmib", "curl", "wget" ]:
+        ensure => ["installed"],
+        require => Exec['apt-update']    
+    }
+    
 }
 
 class science {
@@ -117,32 +139,32 @@ class pythononwheels {
     exec {
       "WebOb":
       command => "/usr/bin/sudo pip install WebOb",
-      require => Package["python-pip"]
+      require => Package["python-pip"],
     }
 
     exec {
       "Mako":
       command => "/usr/bin/sudo pip install Mako",
-      require => Package["python-pip"]
+      require => Package["python-pip"],
     }
 
     exec {
       "Beaker":
       command => "/usr/bin/sudo pip install Beaker",
-      require => Package["python-pip"]
+      require => Package["python-pip"],
     }
 
     exec {
       "Nose":
       command => "/usr/bin/sudo pip install Nose",
-      require => Package["python-pip"]
+      require => Package["python-pip"],
     }
     
     exec {
       "pow_devel":
       command => "/bin/true && cd /home/vagrant/ && /usr/bin/git clone https://github.com/pythononwheels/pow_devel.git && chown vagrant.vagrant -R pow_devel",
       require => [Package["git-core"], Exec["WebOb"], Exec["Mako"], Exec["Beaker"], Exec["Nose"]],
-      onlyif => "/bin/true && test ! -d /home/vagrant/pow_devel"
+      onlyif => "/bin/true && test ! -d /home/vagrant/pow_devel",
     }
     
     exec {
@@ -156,11 +178,12 @@ class pythononwheels {
 
 class gui {
 
-  exec { "apt-update-gui":
-    command => "/usr/bin/sudo apt-get -y update"
+  exec { 
+    "apt-update-gui":
+    command => "/usr/bin/sudo apt-get -y update",
   }
   
-  package{
+  package {
     "ubuntu-desktop":
     ensure => ["installed"],
     require => Exec['apt-update-gui'],
@@ -169,25 +192,39 @@ class gui {
   exec {
     "gvim":
     command => "/usr/bin/sudo apt-get install gvim",
+    require => Package["ubuntu-desktop"],
   }
 
   exec {
     "repo":
     command => "/usr/bin/sudo add-apt-repository ppa:webupd8team/sublime-text-2 && /usr/bin/sudo apt-get -y update",
-    require => Package["python-software-properties"]
+    require => Package["python-software-properties"],
   }
   
   exec {
     "sublime-text":
     command => "/usr/bin/sudo apt-get install sublime-text",
-    require => Exec["repo"]
+    require => Exec["repo"],
+    require => Package["ubuntu-desktop"],
   }
   
 }
 
+class keepuptodate {
+    
+    exec {
+        "apt-upgrade",
+        command => "/usr/bin/sudo apt-get -y upgrade",
+    }
+
+}
+
 include core
 include python
+include pythondev
+include networking
 include gui
+include keepuptodate
 
 #include science
 #include web

@@ -3,6 +3,7 @@ Vagrant::Config.run do |config|
   
   config.vm.box = "PythonDevBootstrapPrecise"
   config.ssh.guest_port = 22
+  config.vm.customize ["modifyvm", :id, "--memory", 512]
 
    config.vm.provision :puppet do |puppet|
      puppet.manifests_path = "manifests"
