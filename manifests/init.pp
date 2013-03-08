@@ -33,7 +33,7 @@ class python {
 
 class pythondev {
     package {
-        [ "dpkg-dev", "swig", "python2.7-dev", "libwebkitgtk-dev", "libjpeg-dev", "libtiff-dev",
+        [ "dpkg-dev", "swig", "python2.7-dev", "libwebkitgtk-dev", "libjpeg-dev", "libtiff4-dev",
         "checkinstall", "ubuntu-restricted-extras", "freeglut3", "freeglut3-dev", "libgtk2.0-dev", "libsdl1.2-dev",
         "libgstreamer-plugins-base0.10-dev", "libwxgtk2.8-dev" ]:
         ensure => ["installed"],
@@ -194,33 +194,27 @@ class pythononwheels {
 
 class gui {
 
-  exec { 
-    "apt-update-gui":
-    command => "/usr/bin/sudo apt-get -y update",
-  }
-  
   package {
     "ubuntu-desktop":
     ensure => ["installed"],
-    require => Exec['apt-update-gui'],
-  }
-  
-  exec {
-    "gvim":
-    command => "/usr/bin/sudo apt-get install gvim",
-    require => Package["ubuntu-desktop"],
   }
 
+  package { 
+    [ "vim-gtk" ]:
+      ensure => ["installed"],
+      require => Package["ubuntu-desktop"]
+  }
+  
   exec {
     "repo":
     command => "/usr/bin/sudo add-apt-repository ppa:webupd8team/sublime-text-2 && /usr/bin/sudo apt-get -y update",
     require => Package["python-software-properties"],
   }
-  
-  exec {
-    "sublime-text":
-    command => "/usr/bin/sudo apt-get install sublime-text",
-    require => Exec["repo"],
+
+  package { 
+    [ "sublime-text" ]:
+      ensure => ["installed"],
+      require => [Package["ubuntu-desktop"], Exec["repo"]]
   }
   
 }
@@ -230,6 +224,7 @@ class keepuptodate {
     exec {
         "apt-upgrade":
         command => "/usr/bin/sudo apt-get -y upgrade",
+        require => [Package["ubuntu-desktop"], Exec["wx-from-source"]],
     }
 
 }
