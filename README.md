@@ -8,7 +8,7 @@ Complete Python Development Environment on top of a Vagrant VM.
 
 
 * [VirtualBox](http://www.virtualbox.org/)
-* [VirtualBox Extension Pack](http://download.virtualbox.org/virtualbox/4.2.0/Oracle_VM_VirtualBox_Extension_Pack-4.2.0-80737.vbox-extpack)
+* [VirtualBox Extension Pack](https://www.virtualbox.org/wiki/Downloads)
 * [Vagrant](http://www.vagrantup.com/)
 * [git](http://git-scm.com/downloads)
 or one of the Github GUI clients: [OSX](http://mac.github.com/), [Windows] (http://windows.github.com/), [Eclipse](http://eclipse.github.com/)
@@ -20,9 +20,9 @@ or one of the Github GUI clients: [OSX](http://mac.github.com/), [Windows] (http
 ## BASIC USAGE
 
 1. Assuming you have met the above requirements. 
-2. Provision a new Vagrant VM (using PythonDevBootstrap as example)
+2. Provision a new Vagrant VM (using PythonDevBootstrapPrecise as example)
 
-        $ vagrant box add PythonDevBootstrap http://files.vagrantup.com/lucid32.box
+        $ vagrant box add PythonDevBootstrapPrecise http://files.vagrantup.com/precise32.box
         $ cd python-dev-bootstrap (Wherever your cloned path is for this repo)
         $ vagrant up
  		$ vagrant ssh
