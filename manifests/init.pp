@@ -33,10 +33,11 @@ class python {
 
 class pythondev {
     package {
-        [ "dpkg-dev", "build-essential", "swig", "python2.7-dev", "libwebkitgtk-dev", "libjpeg-dev", "libtiff-dev",
+        [ "dpkg-dev", "swig", "python2.7-dev", "libwebkitgtk-dev", "libjpeg-dev", "libtiff-dev",
         "checkinstall", "ubuntu-restricted-extras", "freeglut3", "freeglut3-dev", "libgtk2.0-dev", "libsdl1.2-dev",
-        "libgstreamer-plugins-base0.10-dev", ]
-        ensure => ["installed"]
+        "libgstreamer-plugins-base0.10-dev", "libwxgtk2.8-dev" ]:
+        ensure => ["installed"],
+        require => Exec['apt-update']    
     }
 
     exec {
@@ -53,8 +54,23 @@ class pythondev {
 
     exec {
       "wx-from-source":
-      command => "cd /tmp && apt-get source -d wxwidgets2.8 && dpkg-source -x wxwidgets2.8_2.8.12.1-6ubuntu2.dsc && cd wxwidgets2.8-2.8.12.1/wxPython && sudo python setup.py install"
-      require => Package["python-dev", "python-pip", "dpkg-dev"]
+      cwd => "/tmp",
+      command => "/usr/bin/apt-get source -d wxwidgets2.8 && /usr/bin/dpkg-source -x wxwidgets2.8_2.8.12.1-6ubuntu2.dsc",
+      #creates => "/tmp/wxwidgets2.8-2.8.12.1/wxPython",
+      creates => '/usr/local/lib/python2.7/dist-packages/wx/lib/__init__.pyc',
+      path => "/bin:/usr/bin:/usr/local/bin",
+
+      require => [Exec['apt-update'], Package["python-dev", "python-pip", "dpkg-dev"]]
+    }
+
+    exec {
+      "compile-wx-from-source":
+      cwd => "/tmp/wxwidgets2.8-2.8.12.1/wxPython",
+      command => "/usr/bin/sudo python setup.py install",
+      creates => '/usr/local/lib/python2.7/dist-packages/wx/lib/__init__.pyc',
+      path => '/bin:/usr/bin:/usr/local/bin',
+
+      require => Exec['wx-from-source']
     }
 }
 
@@ -205,7 +221,6 @@ class gui {
     "sublime-text":
     command => "/usr/bin/sudo apt-get install sublime-text",
     require => Exec["repo"],
-    require => Package["ubuntu-desktop"],
   }
   
 }
@@ -213,7 +228,7 @@ class gui {
 class keepuptodate {
     
     exec {
-        "apt-upgrade",
+        "apt-upgrade":
         command => "/usr/bin/sudo apt-get -y upgrade",
     }
 
