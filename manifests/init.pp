@@ -1,14 +1,107 @@
 import "sql.pp"
 
-class general{
+class core {
   
     exec { "apt-update":
       command => "/usr/bin/sudo apt-get -y update"
     }
   
     package { 
-      [ "vim", "git-core", "python", "python-setuptools", "python-dev", "python-twisted", "python-pip", "python-matplotlib",
-        "build-essential", "python-imaging", "python-numpy", "python-scipy", "python-software-properties", "idle", "python-qt4"]:
+      [ "vim", "git-core", "build-essential" ]:
+        ensure => ["installed"],
+        require => Exec['apt-update']    
+    }
+}
+
+class python {
+
+    package { 
+      [ "python", "python-setuptools", "python-dev", "python-pip",
+        "python-matplotlib", "python-imaging", "python-numpy", "python-scipy",
+        "python-software-properties", "idle", "python-qt4", "python-wxgtk2.8" ]:
+        ensure => ["installed"],
+        require => Exec['apt-update']    
+    }
+
+    exec {
+      "virtualenv":
+      command => "/usr/bin/sudo pip install virtualenv",
+      require => Package["python-dev", "python-pip"]
+    }
+
+}
+
+class pythondev {
+    package {
+        [ "dpkg-dev", "swig", "python2.7-dev", "libwebkitgtk-dev", "libjpeg-dev", "libtiff4-dev",
+        "checkinstall", "ubuntu-restricted-extras", "freeglut3", "freeglut3-dev", "libgtk2.0-dev", "libsdl1.2-dev",
+        "libgstreamer-plugins-base0.10-dev", "libwxgtk2.8-dev" ]:
+        ensure => ["installed"],
+        require => Exec['apt-update']    
+    }
+
+    exec {
+      "SquareMap":
+      command => "/usr/bin/sudo pip install SquareMap",
+      require => Package["python-dev", "python-pip"]
+    }
+
+    exec {
+      "RunSnakeRun":
+      command => "/usr/bin/sudo pip install RunSnakeRun",
+      require => Package["python-dev", "python-pip"]
+    }
+
+    exec {
+      "wx-from-source":
+      cwd => "/tmp",
+      command => "/usr/bin/apt-get source -d wxwidgets2.8 && /usr/bin/dpkg-source -x wxwidgets2.8_2.8.12.1-6ubuntu2.dsc",
+      #creates => "/tmp/wxwidgets2.8-2.8.12.1/wxPython",
+      creates => '/usr/local/lib/python2.7/dist-packages/wx/lib/__init__.pyc',
+      path => "/bin:/usr/bin:/usr/local/bin",
+
+      require => [Exec['apt-update'], Package["python-dev", "python-pip", "dpkg-dev"]]
+    }
+
+    exec {
+      "compile-wx-from-source":
+      cwd => "/tmp/wxwidgets2.8-2.8.12.1/wxPython",
+      command => "/usr/bin/sudo python setup.py install",
+      creates => '/usr/local/lib/python2.7/dist-packages/wx/lib/__init__.pyc',
+      path => '/bin:/usr/bin:/usr/local/bin',
+
+      require => Exec['wx-from-source']
+    }
+}
+
+class networking {
+    package { 
+      [ "snmp", "tkmib", "curl", "wget" ]:
+        ensure => ["installed"],
+        require => Exec['apt-update']    
+    }
+    
+}
+
+class science {
+
+    exec {
+      "numarray":
+      command => "/usr/bin/sudo easy_install http://downloads.sourceforge.net/project/numpy/Old%20Numarray/1.5.2/numarray-1.5.2.tar.gz",
+      require => Package["python-setuptools"]
+    }
+
+    exec {
+      "biopy":
+      command => "/usr/bin/sudo pip install http://biopy.googlecode.com/files/biopy-0.1.7.tar.gz",
+      require => Package["python-numpy", "python-dev", "python-scipy", "python-pip"]
+    }
+}
+
+class web {
+
+    package { 
+      [ "python-twisted" ]:
         ensure => ["installed"],
         require => Exec['apt-update']    
     }
@@ -19,12 +112,6 @@ class general{
       require => Package["python-dev", "python-pip"]
     }
 
-    exec{
-      "biopy":
-      command => "/usr/bin/sudo pip install http://biopy.googlecode.com/files/biopy-0.1.7.tar.gz",
-      require => Package["python-numpy", "python-dev", "python-scipy", "python-pip"]
-    }
-    
     exec {
       "sqlalchemy":
       command => "/usr/bin/sudo pip install sqlalchemy",
@@ -48,12 +135,6 @@ class general{
       command => "/usr/bin/sudo pip install mechanize",
       require => Package["python-pip"]
     }
-
-    exec {
-      "numarray":
-      command => "/usr/bin/sudo easy_install http://downloads.sourceforge.net/project/numpy/Old%20Numarray/1.5.2/numarray-1.5.2.tar.gz",
-      require => Package["python-setuptools"]
-    }
     
     exec {
       "scrapelib":
@@ -67,39 +148,39 @@ class general{
       require => Package["python-pip"]
     }
 
+}
 
-
-#PythonOnWheels
+class pythononwheels {
 
     exec {
       "WebOb":
       command => "/usr/bin/sudo pip install WebOb",
-      require => Package["python-pip"]
+      require => Package["python-pip"],
     }
 
     exec {
       "Mako":
       command => "/usr/bin/sudo pip install Mako",
-      require => Package["python-pip"]
+      require => Package["python-pip"],
     }
 
     exec {
       "Beaker":
       command => "/usr/bin/sudo pip install Beaker",
-      require => Package["python-pip"]
+      require => Package["python-pip"],
     }
 
     exec {
       "Nose":
       command => "/usr/bin/sudo pip install Nose",
-      require => Package["python-pip"]
+      require => Package["python-pip"],
     }
     
     exec {
       "pow_devel":
       command => "/bin/true && cd /home/vagrant/ && /usr/bin/git clone https://github.com/pythononwheels/pow_devel.git && chown vagrant.vagrant -R pow_devel",
       require => [Package["git-core"], Exec["WebOb"], Exec["Mako"], Exec["Beaker"], Exec["Nose"]],
-      onlyif => "/bin/true && test ! -d /home/vagrant/pow_devel"
+      onlyif => "/bin/true && test ! -d /home/vagrant/pow_devel",
     }
     
     exec {
@@ -111,42 +192,55 @@ class general{
 }
 
 
-class gui{
+class gui {
 
-  exec { "apt-update-gui":
-    command => "/usr/bin/sudo apt-get -y update"
-  }
-  
-  package{
+  package {
     "ubuntu-desktop":
     ensure => ["installed"],
-    require => Exec['apt-update-gui'],
   }
-  
-  exec {
-    "gedit":
-    command => "/usr/bin/sudo apt-get install gedit",
-    require => Package["ubuntu-desktop"]
+
+  package { 
+    [ "vim-gtk" ]:
+      ensure => ["installed"],
+      require => Package["ubuntu-desktop"]
   }
   
   exec {
     "repo":
     command => "/usr/bin/sudo add-apt-repository ppa:webupd8team/sublime-text-2 && /usr/bin/sudo apt-get -y update",
-    require => Package["python-software-properties"]
+    require => Package["python-software-properties"],
   }
-  
-  exec {
-    "sublime-text":
-    command => "/usr/bin/sudo apt-get install sublime-text",
-    require => Exec["repo"]
+
+  package { 
+    [ "sublime-text" ]:
+      ensure => ["installed"],
+      require => [Package["ubuntu-desktop"], Exec["repo"]]
   }
   
 }
 
-include general
-include sql
-include mongodb
-include elasticsearch
+class keepuptodate {
+    
+    exec {
+        "apt-upgrade":
+        command => "/usr/bin/sudo apt-get -y upgrade",
+        require => [Package["ubuntu-desktop"], Exec["wx-from-source"]],
+    }
+
+}
+
+include core
+include python
+include pythondev
+include networking
 include gui
+include keepuptodate
+
+#include science
+#include web
+#include pythononwheels
+#include sql
+#include mongodb
+#include elasticsearch
 
 
