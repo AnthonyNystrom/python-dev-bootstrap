@@ -58,7 +58,7 @@ The above will build a 512MB virtual machine running Ubuntu with the following i
 23. mechanize
 24. flask
 
-
+Hint: Not everything of this is installed by default. Change comments at the end of manifests/init.pp to influence it.
 	
 ## OTHER
 
