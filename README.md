@@ -56,6 +56,7 @@ The above will build a 512MB virtual machine running Ubuntu with the following i
 21. Beautiful Soup
 22. pythonweb
 23. mechanize
+24. flask
 
 
 	
