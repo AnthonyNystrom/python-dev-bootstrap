@@ -303,11 +303,11 @@ include gui
 include keepuptodate
 
 #include science
-include web
+#include web
 #include pythononwheels
-include sql
+#include sql
 #include mongodb
 #include elasticsearch
-include flask
+#include flask
 
 
