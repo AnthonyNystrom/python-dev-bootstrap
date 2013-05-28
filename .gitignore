@@ -2,3 +2,7 @@
 *~
 *.swp
 .DS_Store
+*.pyc
+dist/*
+build/*
+*#*
