@@ -2,6 +2,7 @@
 Vagrant::Config.run do |config|
   
   config.vm.box = "PythonDevBootstrapPrecise"
+  config.vm.box_url = "http://files.vagrantup.com/precise32.box"
   config.ssh.guest_port = 22
   config.vm.customize ["modifyvm", :id, "--memory", 512]
 
