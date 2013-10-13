@@ -22,7 +22,6 @@ or one of the Github GUI clients: [OSX](http://mac.github.com/), [Windows] (http
 1. Assuming you have met the above requirements. 
 2. Provision a new Vagrant VM (using PythonDevBootstrapPrecise as example)
 
-        $ vagrant box add PythonDevBootstrapPrecise http://files.vagrantup.com/precise32.box
         $ cd python-dev-bootstrap (Wherever your cloned path is for this repo)
         $ vagrant up
  		$ vagrant ssh
