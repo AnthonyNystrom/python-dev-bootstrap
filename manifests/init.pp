@@ -301,13 +301,10 @@ include pythondev
 include networking
 include gui
 include keepuptodate
+include web
+include sql
+include mongodb
 
 #include science
-#include web
 #include pythononwheels
-#include sql
-#include mongodb
-#include elasticsearch
 #include flask
-
-
