@@ -1,8 +1,7 @@
-
 Vagrant.configure("2") do |config|
 
-  config.vm.box     = 'PythonDevBootstrapPrecise'
-  config.vm.box_url = "http://files.vagrantup.com/precise32.box"
+  config.vm.box     = 'PythonDevBootstrap_13_10'
+  config.vm.box_url = "http://puppet-vagrant-boxes.puppetlabs.com/ubuntu-1310-x64-virtualbox-nocm.box"
 
   #network
   config.vm.network :private_network, ip: "192.168.33.10"
@@ -16,7 +15,7 @@ Vagrant.configure("2") do |config|
   end
   config.vm.provider :virtualbox do |vb|
     vb.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
-    vb.customize ["modifyvm", :id, "--memory", "512"]
+    vb.customize ["modifyvm", :id, "--memory", "1024"]
   end
 
   config.vm.provision :puppet do |puppet|
