@@ -1,9 +1,13 @@
 import "sql.pp"
 
 class core {
-  
+    exec { "apt-oldrepos":
+      command => "/usr/bin/sudo sed -i -re 's/([a-z]{2}\.)?archive.ubuntu.com|security.ubuntu.com/old-releases.ubuntu.com/g' /etc/apt/sources.list"
+    }
+    
     exec { "apt-update":
       command => "/usr/bin/sudo apt-get -y update"
+      require => Exec['apt-oldrepos']
     }
   
     package { 
